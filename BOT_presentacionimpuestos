@@ -1,0 +1,73 @@
+from tkinter import*
+from selenium import webdriver
+import time
+import pandas as pd
+import random
+import tqdm as tqdm
+import warnings
+from webdriver_manager.chrome import ChromeDriverManager
+import tkinter as tk
+
+driver = webdriver.Chrome(ChromeDriverManager().install())
+
+warnings.simplefilter("ignore")
+
+options = webdriver.ChromeOptions()
+options.add_argument('--remote-debugging-port=9515')
+#driver = webdriver.Chrome('./chromedriver.exe', options=options)
+#driver = webdriver.Chrome('/usr/bin/chromedriver', options=options)
+url_ra = 'https://www.afip.gob.ar/landing/default.asp'
+driver.implicitly_wait(3)
+driver.get(url_ra)
+
+driver.find_element_by_xpath('//*[@id="cajaClaveFiscal"]/div[1]/a').click()
+
+#Cambia a nueva pestaña e ingreso usario
+
+window_after = driver.window_handles[1]
+
+driver.switch_to.window(window_after)
+
+driver.find_element_by_css_selector("#F1\:username").send_keys("")
+
+#ingreso clave
+driver.find_element_by_css_selector("#F1\:password").send_keys("")
+#clickl en boton ingresar
+time.sleep(3)
+driver.find_element_by_xpath('//*[@id="F1:btnIngresar"]').click()
+
+time.sleep(3)
+
+driver.find_element_by_xpath('//*[@id="F1:btnSiguiente"]').click()
+
+
+
+#cambio de pestaña!!!
+window_before = driver.window_handles[0]
+time.sleep(5)
+
+
+def comienzo():
+    label2= Label(root, text='Inicializando...')
+    driver = webdriver.Chrome(ChromeDriverManager().install())
+    warnings.simplefilter("ignore")
+    options = webdriver.ChromeOptions()
+    options.add_argument('--remote-debugging-port=9515')
+    url_ra = 'https://www.afip.gob.ar/landing/default.asp'
+    driver.implicitly_wait(3)
+    driver.get(url_ra)
+    
+    label2.pack()
+
+             
+root.title('Liquidación de IIBB')
+root.geometry('300x200')
+
+texto= Label(root, text= "Ingrese Usuario")
+texto.place(x=30,y=50)
+
+boton1=Button(root, text='Comezar',command= comienzo)
+boton1.place(x=50,y=80)
+
+
+root.mainloop()
